@@ -7,10 +7,11 @@ const verifyIdTokenMiddleware = (req,res,next) =>{
         return
     }
     if(verifyIdToken(id_token)){
-        res.token = id_token;
+        req.token = id_token;
         next()
     }
-    res.status(401).json({status:401, message:"Invalid Auth Token"})
+    else
+        res.status(401).json({status:401, message:"Invalid Auth Token"})
 }
 
 
