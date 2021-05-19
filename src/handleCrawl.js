@@ -1,3 +1,5 @@
+const validateUrl = require('../util/validateUrl')
+
 const handleCrawl = (req,res)=>{
     const id_token = req.token
     const url = req.websiteUrl
@@ -5,6 +7,5 @@ const handleCrawl = (req,res)=>{
     let tempList = ["/about","/home","/contact","/privacy","/random"]
     res.send({status:200,urls:tempList})
 }
-
 
 module.exports = handleCrawl
