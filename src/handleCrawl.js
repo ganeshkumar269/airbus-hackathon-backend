@@ -3,10 +3,10 @@ const validateUrl = require('../util/validateUrl')
 const handleCrawl = (req,res)=>{
 
     const id_token = req.token
-    const url = req.websiteUrl
+    const url = req.query.website
 
     if(!validateUrl(url)) {
-        res.status(400).send({"status":400})
+        res.status(400).send({"status":400,message:"invalid URL"})
         return
     }
 
