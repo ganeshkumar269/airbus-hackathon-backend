@@ -1,4 +1,5 @@
-const getKeywords = require("../db/getKeyWords")
+const getKeywords = require("../db/getKeyWords");
+const getKeywordUrls = require("../db/getKeywordUrls");
 const logger = require("../util/loggermodule")
 const onMessage = require('./onMessage')
 
@@ -13,20 +14,8 @@ const onConnection = async (ws,conn,req)=>{
     conn.on('close',()=>logger.info("Ws Conn closed"))
 
     Promise.all([
-        customWait(2*1000).then(data=>{
-            logger.info("customwait1 over for 2 sec")
-            return getKeywords()
-        }),
-        customWait(2*1000)
-        .then(data=>{
-            logger.info("customwait2 over for 2 sec")
-            return {
-                "about" : ["/about","/about-you"],
-                "contact":["/contact-us","/contact-sss"],
-                "home":["/home"],
-                "private":["/privatehome","/privateroom"]
-            }
-        })
+        getKeywords(),
+        getKeywordUrls()
     ])
     .then((values)=>{
         if(values.length == 2){

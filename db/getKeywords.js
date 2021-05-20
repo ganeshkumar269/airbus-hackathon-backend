@@ -8,7 +8,7 @@ const getKeywords = async (website_id)=>{
         .find({"website_id":website_id})
         .limit(1)
         .toArray()
-        .then(data=>data[0])
+        .then(data=>data ? data[0] : data)
     }
     catch(err){
         logger.info("getKeywords.js ",err)
