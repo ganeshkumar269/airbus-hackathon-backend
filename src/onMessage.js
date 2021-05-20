@@ -34,11 +34,11 @@ const onMessage = async (conn,data,keywords,keywordToUrls)=>{
             return
         }
         let matchedKeywords = await patternMatch(searchText,keywords)
-        logger.info(matchedKeywords)
+        logger.info("matchedKeywords ",matchedKeywords)
         let response_list = []
         
         matchedKeywords.forEach(keyword=>{
-            response_list = [response_list, ...keywordToUrls[keyword]]
+            response_list = response_list + keywordToUrls[keyword]
         })
         logger.info(response_list)
         conn.send(JSON.stringify(response_list))

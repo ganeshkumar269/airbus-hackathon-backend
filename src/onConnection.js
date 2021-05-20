@@ -15,8 +15,8 @@ const onConnection = async (ws,conn,req)=>{
         conn.close(400,"No website_id found")
     }
     
-    const url = new URL(req.url)
-    const website_id = url.searchParams.get('website_id') || "12233"
+    const searchParams = new URLSearchParams(req.url)
+    const website_id = searchParams.get('website_id') || "12233"
 
 
     logger.info("Websocket connection attempt with website_id: ",website_id)
