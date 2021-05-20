@@ -1,7 +1,7 @@
 const patternMatch = require('../util/patternMatch')
 
 const handleNavSearch = async (req,res)=>{
-    const searchText = req.query?.searchText;
+    const searchText = req.query.searchText;
 
     if(!searchText){
         res.status(400).json({status:400,message:"searchtext not found"})
