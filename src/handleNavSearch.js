@@ -1,4 +1,6 @@
-const handleNavSearch = (req,res)=>{
+const patternMatch = require('../util/patternMatch')
+
+const handleNavSearch = async (req,res)=>{
     const searchText = req.query?.searchText;
 
     if(!searchText){
@@ -7,7 +9,7 @@ const handleNavSearch = (req,res)=>{
     }
     
     try{
-        const urls =  await patternMatch(searchText)
+        const urls =  await patternMatch(searchText,[])
         res.status(200).json({status:200,urls:urls})
     }
     catch(err){
@@ -15,3 +17,5 @@ const handleNavSearch = (req,res)=>{
     }
 
 }
+
+module.exports = handleNavSearch
