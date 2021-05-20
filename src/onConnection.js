@@ -18,13 +18,14 @@ const onConnection = async (ws,conn,req)=>{
     conn.on('error',(err)=>logger.info("Ws Conn error",err))
 
     Promise.all([
-        getKeywords(),
-        getKeywordUrls()
+        getKeywords("12233"),
+        getKeywordUrls("12233")
     ])
     .then((values)=>{
         if(values.length == 2){
-            keywords = values[0]
-            keywordToUrls = values[1]
+            logger.info(values)
+            keywords = values[0].keywords
+            keywordToUrls = values[1].urls
         }
     })
 
