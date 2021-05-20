@@ -8,6 +8,13 @@ const customWait=ms=>new Promise(resolve => setTimeout(resolve, ms));
 const onConnection = async (ws,conn,req)=>{
     let keywords = []
     let keywordToUrls = {}
+
+
+    if(!("url" in req)){
+        logger.info("Url Not found in req object")
+        conn.close(400,"No website_id found")
+    }
+    
     const url = new URL(req.url)
     const website_id = url.searchParams.get('website_id') || "12233"
 
