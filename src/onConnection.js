@@ -8,7 +8,12 @@ const customWait=ms=>new Promise(resolve => setTimeout(resolve, ms));
 const onConnection = async (ws,conn,req)=>{
     let keywords = []
     let keywordToUrls = {}
-    logger.info("there is a websocket connection attempt")
+    const url = new URL(req)
+    const website_id = url.searchParams.get('website_id') || "12233"
+
+
+    logger.info("Websocket connection attempt with website_id: ",website_id)
+    
     conn.on('open',()=>logger.info("Ws Conn opened"))
     conn.on('message',(data)=>{
         logger.info("Message Recieved: ",data)
@@ -25,7 +30,7 @@ const onConnection = async (ws,conn,req)=>{
         if(values.length == 2){
             logger.info(values)
             keywords = values[0].keywords
-            keywordToUrls = values[1].urls
+            keywordToUrls = values[1]
         }
     })
 
