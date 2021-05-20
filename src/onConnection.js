@@ -10,7 +10,10 @@ const onConnection = async (ws,conn,req)=>{
     let keywordToUrls = {}
     logger.info("there is a websocket connection attempt")
     conn.on('open',()=>logger.info("Ws Conn opened"))
-    conn.on('message',(data)=>onMessage(conn,data,keywords,keywordToUrls))
+    conn.on('message',(data)=>{
+        logger.info("Message Recieved: ",data)
+        onMessage(conn,data,keywords,keywordToUrls)
+    })
     conn.on('close',()=>logger.info("Ws Conn closed"))
     conn.on('error',(err)=>logger.info("Ws Conn error",err))
 
