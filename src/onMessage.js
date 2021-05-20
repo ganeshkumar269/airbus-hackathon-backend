@@ -33,15 +33,17 @@ const onMessage = async (conn,data,keywords,keywordToUrls)=>{
             conn.send(JSON.stringify({status:400,"msg":"No searchText Found"}))
             return
         }
+        
         let matchedKeywords = await patternMatch(searchText,keywords)
         logger.info("matchedKeywords ",matchedKeywords)
-        let response_list = []
+        let response_obj = {}
         
         matchedKeywords.forEach(keyword=>{
-            response_list = response_list + keywordToUrls[keyword]
+            response_obj[keyword] = keywordToUrls[keyword]
         })
-        logger.info(response_list)
-        conn.send(JSON.stringify(response_list))
+
+        logger.info(response_obj)
+        conn.send(JSON.stringify(response_obj))
     }
     if(data_json.chatbot == true)
         handleChatbot(data_json)
