@@ -24,9 +24,9 @@ const onMessage = async (conn,data,keywords,keywordToUrls)=>{
         logger.info(err)
         return
     }
-    
-    if(data_json?.navsearch == true){
-        const searchText = data_json?.searchText
+
+    if(data_json.navsearch == true){
+        const searchText = data_json.searchText
         let matchedKeywords = await patternMatch(searchText,keywords)
         logger.info(matchedKeywords)
         let response_list = []
