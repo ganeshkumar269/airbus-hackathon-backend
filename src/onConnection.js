@@ -8,7 +8,7 @@ const customWait=ms=>new Promise(resolve => setTimeout(resolve, ms));
 const onConnection = async (ws,conn,req)=>{
     let keywords = []
     let keywordToUrls = {}
-    const url = new URL(req)
+    const url = new URL(req.url)
     const website_id = url.searchParams.get('website_id') || "12233"
 
 
