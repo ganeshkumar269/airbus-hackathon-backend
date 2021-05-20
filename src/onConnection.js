@@ -1,4 +1,4 @@
-const getKeywords = require("../db/getKeyWords");
+const getKeywords = require("../db/getKeywords");
 const getKeywordUrls = require("../db/getKeywordUrls");
 const logger = require("../util/loggermodule")
 const onMessage = require('./onMessage')
