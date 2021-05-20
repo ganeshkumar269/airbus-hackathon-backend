@@ -12,6 +12,7 @@ const onConnection = async (ws,conn,req)=>{
     conn.on('open',()=>logger.info("Ws Conn opened"))
     conn.on('message',(data)=>onMessage(conn,data,keywords,keywordToUrls))
     conn.on('close',()=>logger.info("Ws Conn closed"))
+    conn.on('error',(err)=>logger.info("Ws Conn error",err))
 
     Promise.all([
         getKeywords(),
