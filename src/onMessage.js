@@ -25,8 +25,14 @@ const onMessage = async (conn,data,keywords,keywordToUrls)=>{
         return
     }
 
-    if(data_json.navsearch == true){
+    if(data_json.navsearch == true)
+    {
         const searchText = data_json.searchText
+        if(!searchText){
+            logger.info("SearchText Found")
+            conn.send(JSON.stringify({status:400,"msg":"No searchText Found"}))
+            return
+        }
         let matchedKeywords = await patternMatch(searchText,keywords)
         logger.info(matchedKeywords)
         let response_list = []
@@ -37,6 +43,8 @@ const onMessage = async (conn,data,keywords,keywordToUrls)=>{
         logger.info(response_list)
         conn.send(JSON.stringify(response_list))
     }
+    if(data_json.chatbot == true)
+        handleChatbot(data_json)
 }
 
 module.exports = onMessage
