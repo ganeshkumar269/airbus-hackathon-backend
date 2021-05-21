@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const logger = require('../util/loggermodule')
 const dbConn = require('../db/getDbConn').getDbConn;
 
@@ -92,6 +94,81 @@ const addBugReport = async function(req, res) {
 }
 
 const userLogin = async function(req, res) {
+    const email = req.body.email
+    const password = req.body.password
+    const website_id = req.body.website_id
+    if(email==null || password==null || website_id==null){
+        logger.error("Data missing")
+        res.status(404).send({"msg": "Data is Missing"})
+    }else {        
+        const client = await dbConn();
+        const database = client.db("ahd")
+        const collection = database.collection("users")
+        
+        //need a way to check website id and then user email
+        const userData = await collection.findOne({website_id:website_id})
+        if(userData!=null){
+            const users = userData.users;
+            //check the user array
+            const user = users.find((u) => u.email === email)
+            // user is present check for password
+            if(user){
+                const passwordMatch = await bcrypt.compare(password, user.password)
+
+                if(passwordMatch){
+                    logger.info("User logged In")
+                    let token = jwt.sign({user:user}, "secret")
+                    res.cookie('token',token, { maxAge: 900000, httpOnly: true });
+                    res.status(200).json({"token":token});
+                    
+                }else {
+                    res.status(404).json({"msg": "User name or password is wrong"})
+                }
+            } else {
+                // user is not present
+                const hashedPassword = await bcrypt.hash(req.body.password, 9)
+                const newUser = {
+                    email: req.body.email,
+                    password: hashedPassword,
+                }
+                const result = await collection.updateOne(
+                    {website_id:website_id}, {$push: {users:newUser}})
+
+                if(result){
+                    logger.info("User logged In")
+                    let token = jwt.sign({user:newUser}, "secret")
+                    res.cookie('token',token, { maxAge: 900000, httpOnly: true });
+                    res.status(200).json({"token":token});
+                }else {
+                    res.status(500).json({"error": err.message})
+                }
+
+            }
+        }else{
+            //website is not present
+            // create user and send jwt
+            const hashedPassword = await bcrypt.hash(req.body.password, 9)
+            const user = {
+                email: req.body.email,
+                password: hashedPassword,
+            }
+
+            const client = await dbConn();
+            const database = client.db("ahd")
+            const users = database.collection("users")
+
+            const result = await users.insertOne({website_id:website_id, users:[user]})
+
+            if(result){
+                logger.info("User logged In")
+                let token = jwt.sign({user:user}, "secret")
+                res.cookie('token',token, { maxAge: 900000, httpOnly: true });
+                res.status(200).json({"token":token});
+            }else {
+                res.status(500).json({"error": err.message})
+            }
+        }
+    }
 
 }
 
@@ -103,5 +180,6 @@ module.exports = {
     // handleSearch,
     feedback,
     addBugReport,
+    userLogin
 }
 
