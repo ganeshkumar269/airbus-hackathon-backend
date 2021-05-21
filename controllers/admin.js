@@ -4,6 +4,8 @@ const {v4:uuidv4} = require('uuid')
 
 const logger = require('../util/loggermodule')
 const dbConn = require('../db/getDbConn').getDbConn;
+const addQna = require('../util/addQna')
+
 
 const loginUser = async function (req, res) {
     const email = req.body.email
@@ -213,11 +215,35 @@ async function checkIfUserAlreadyPresent(email) {
     else return false
 }
 
+const handleAddQna = async (req,res)=>{
+    const question = req.body.question
+    const answer = req.body.answer 
+    const website_id = req.body.website_id
+    if(!question || !answer || !website_id){
+        logger.info("Missing Details")
+        res.status(400).json({"message":"question or answer is missing"})
+        return
+    }
+    
+    try{
+        await addQna(question,answer,website_id)
+        res.status(200).json({"message":"Question Added Successfully"})
+    }
+    catch(err){
+        logger.info(err)
+        res.status(500).json({"message":"Sorry Internal Server Error"})
+    }
+
+}
+
+
+
 module.exports = {
     registerUser, 
     loginUser, 
     getKeywords,
     addKeywords,
-    addAnnouncement
+    addAnnouncement,
+    handleAddQna
 }
 
