@@ -8,15 +8,6 @@ const handleCrawl = async (req,res)=>{
     const id_token = req.token
     const url = req.query.url
     let sameDomain = req.query.sameDomain
-    // try{
-    //     sameDomain = parseInt(req.query.sameDomain)
-    // }
-    // catch(err){
-    //     logger.info("handleCrawl.js sameDomain ParseInt ",err)
-    //     res.status(400).json({message:"sameDomain must be 0 or 1"})
-    //     return 
-    // }
-
     if(!url || !sameDomain){
         res.status(400).json({status:400,message:"url or sameDomain not found"})
         return
