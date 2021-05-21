@@ -204,6 +204,26 @@ const addAnnouncement = async function(req, res) {
     }
 }
 
+const allAnnouncements = async function(req, res) {
+    const website_id = req.query.website_id;
+    if(website_id == null) {
+        logger.error("website_id is not present")
+        res.send(403)
+    } else {
+        try {
+            const client = await dbConn();
+            const database = client.db("ahd")
+            const collection = database.collection("announcement")
+            const data = await collection.findOne({website_id:website_id})
+            const allAnnouncements = data.announcement
+            res.status(200).send(allAnnouncements)
+        }catch(error) {
+            logger.error(error.message);
+            res.status(500).send({"msg":error.message})
+        }
+    }
+}
+
 async function checkIfUserAlreadyPresent(email) {
     const client = await dbConn();
     const database = client.db("ahd")
@@ -244,6 +264,7 @@ module.exports = {
     getKeywords,
     addKeywords,
     addAnnouncement,
+    allAnnouncements,
     handleAddQna
 }
 
