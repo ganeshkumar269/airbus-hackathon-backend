@@ -80,7 +80,8 @@ const getFeedbacks = function(req, res) {
 }
 
 const getKeywords = async function(req, res) {
-    const websiteId = req.query.website_id;
+    const websiteId = req.query.website_id
+    // logger.info(req.body.website_id)
     logger.info(websiteId)
     if(websiteId == null){
         logger.error("website_id not present")
