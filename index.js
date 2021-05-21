@@ -18,7 +18,7 @@ app.use(express.json())
 
 app.get("/",(req,res)=>res.send("Hello,World!"))
 
-app.get('/api/v1/crawl',verifyIdTokenMiddleware, handleCrawl)
+app.get('/api/v1/crawl', handleCrawl)
 app.get("/api/v1/navsearch",handleNavSearch)
 app.use('/api/v1/admin',adminRouter)
 app.use('/api/v1/',widgetRouter)
