@@ -1,7 +1,9 @@
 const express = require('express')
 const verifyTokenMiddleware = require('../middlewares/verifyTokenMiddleware.js')
 
-const {registerUser, loginUser, getKeywords, addKeywords, addAnnouncement} = require('../controllers/admin.js')
+
+const {registerUser, loginUser, getKeywords, addKeywords, addAnnouncement,handleAddQna} = require('../controllers/admin.js')
+
 
 const router = express.Router();
 
@@ -14,7 +16,11 @@ router.post('/register',registerUser)
 router.get('/keywords',verifyTokenMiddleware, getKeywords)
 router.post('/keywords',verifyTokenMiddleware, addKeywords)
 
+
 router.post('/announcement', verifyTokenMiddleware, addAnnouncement)
+
+router.post('/addqna',handleAddQna)
+
 
 module.exports = router
 
