@@ -13,27 +13,52 @@ const dbConn = require('../db/getDbConn').getDbConn;
 //     }
 // }
 
-const feedback = function(req, res) {
-
-    let feedbackData = req.body
-    if(!feedbackData) res.status(400).json({"error": "no data"})
-    feedbackData = {...feedbackData, id:1}
-    dbConn()
-        .then(db=> {
-            return db.db("ahd").collection("feedback").insertOne(feedbackData)
-        })
-        .then(()=> res.status(200).json({"msg" : "feedback successfully submitted"}))
-        .catch((error) => {
-            logger.error(error.message)
-            res.status(500).json({"error": error.message})
-        })
+const feedback = async function(req, res) {
+    const websiteId = req.body.website_id;
+    const email = req.body.email;
+    const feedbackTitle = req.body.feedbackTitle;
+    const feedbackDesc = req.body.feedbackDesc;
+    if(websiteId == null || feedbackTitle == null || feedbackDesc==null || email==null){
+        logger.error("website_id or feedback or  not present")
+        res.send(403)
+    }else {
+            try {
+                const client = await dbConn();
+                const database = client.db("ahd")
+                const collection = database.collection("feedback")
+    
+                const data = await collection.findOne({website_id: websiteId})
+                let feedback = {id: Date.now(), email, feedbackTitle, feedbackDesc}
+                let result
+                if(data){
+                    result = await collection.updateOne(
+                        {website_id: websiteId}, {$push: { feedbacks: feedback}}
+                        )
+                    
+                } else {
+                    result = await collection.insertOne(
+                        {website_id:websiteId, feedbacks:[feedback]}
+                        )
+                }
+            
+                if(result)
+                    res.status(200).json({"msg" : "feedback added"})
+                else
+                    res.send(404)
+            } catch(error) {
+                logger.error(error.message)
+                res.status(500).send({"msg":error.message})
+            }
+        }
 }
 
 const addBugReport = async function(req, res) {
     const websiteId = req.body.website_id;
-    let bugReport = req.body.bugReport;
-    if(websiteId == null || bugReport == null){
-        logger.error("website_id or bug report not present")
+    const email = req.body.email;
+    const bugReportTitle = req.body.bugReportTitle;
+    const bugReportDesc = req.body.bugReportDesc;
+    if(websiteId == null || bugReportTitle == null || bugReportDesc==null || email==null){
+        logger.error("website_id or feedback or  not present")
         res.send(403)
     } else {
         try {
@@ -42,11 +67,11 @@ const addBugReport = async function(req, res) {
             const collection = database.collection("bugReports")
 
             const data = await collection.findOne({website_id: websiteId})
-            bugReport = {id: Date.now(), ...bugReport}
+            let bugReport = {id: Date.now(), email, bugReportTitle, bugReportDesc}
             let result
             if(data){
                 result = await collection.updateOne(
-                    {website_id: websiteId}, {$addToSet: { bugReport: bugReport}}
+                    {website_id: websiteId}, {$push: { bugReport: bugReport}}
                     )
                 
             } else {
