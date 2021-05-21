@@ -25,6 +25,7 @@ const loginUser = async function (req, res) {
                 let token = jwt.sign({user:user}, "secret")
                 res.cookie('token',token, { maxAge: 900000, httpOnly: true });
                 res.status(200).json({"token":token,"website_id":user.website_id});
+
                 
             }else {
                 res.status(404).json({"msg": "User name or password is wrong"})
@@ -80,7 +81,11 @@ const getFeedbacks = function(req, res) {
 }
 
 const getKeywords = async function(req, res) {
-    const websiteId = req.body.website_id;
+
+    const websiteId = req.query.website_id
+    // logger.info(req.body.website_id)
+    logger.info(websiteId)
+  
     if(websiteId == null){
         logger.error("website_id not present")
         res.send(403)
@@ -112,6 +117,7 @@ const addKeywords = async function(req, res) {
         try {
             const client = await dbConn();
             const database = client.db("ahd")
+
             const keywordCollection = database.collection("keyword_table")
 
             const keywordsData = await keywordCollection.findOne({website_id: websiteId})
@@ -150,6 +156,7 @@ const addKeywords = async function(req, res) {
             //     res.status(200).json({"msg" : "keywords added"})
             // else
             //     res.send(404)
+
         } catch(error) {
             logger.error(error.message)
             res.status(500).send({"msg":error.message})
@@ -175,3 +182,4 @@ module.exports = {
     getKeywords,
     addKeywords
 }
+

@@ -11,10 +11,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cheerio": "^1.0.0-rc.9",
     "cors": "^2.8.5",
+    "dialogflow": "^1.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "log4js": "^6.3.0",
-    "mongodb": "^3.6.7"
+    "mongodb": "^3.6.7",
+    "ws": "^7.4.5"
   },
   "devDependencies": {
     "dotenv": "^9.0.2",
