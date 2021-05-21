@@ -176,10 +176,41 @@ const userRegister = async function(req, res) {
     
 }
 
+const getAnnouncement = async function(req, res) {
+    const website_id = req.body.website_id;
+    if(website_id == null) {
+        logger.error("website_id is not present")
+        res.send(403)
+    } else {
+        try {
+            const client = await dbConn();
+            const database = client.db("ahd")
+            const collection = database.collection("announcement")
+            const data = await collection.findOne({website_id:website_id})
+            const allAnnouncements = data.announcement
+            const announcementToday = allAnnouncements.filter((a) => {
+                return ((new Date(a.id).getDay()===new Date().getDay())
+                        && (new Date(a.id).getMonth()===new Date().getMonth())
+                        && (new Date(a.id).getYear()===new Date().getYear())
+                        )
+            })
+            const announcementTodayArr = []
+            announcementToday.forEach(a => {
+                announcementTodayArr.push(a.announcement)
+            });
+            res.status(200).send(announcementTodayArr)
+        }catch(error) {
+            logger.error(error.message);
+            res.status(500).send({"msg":error.message})
+        }
+    }
+}
+
 module.exports = {
     // handleSearch,
     feedback,
     addBugReport,
-    userLogin
+    userLogin,
+    getAnnouncement
 }
 
