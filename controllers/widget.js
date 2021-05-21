@@ -177,7 +177,8 @@ const userRegister = async function(req, res) {
 }
 
 const getAnnouncement = async function(req, res) {
-    const website_id = req.body.website_id;
+    const website_id = req.query.website_id;
+    logger.info("controller/widget.js website_id: ",website_id)
     if(website_id == null) {
         logger.error("website_id is not present")
         res.send(403)
