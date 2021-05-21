@@ -8,8 +8,10 @@ router.get('/', (req, res)=> res.status(200).send("Hello World"))
 // router.get('/search', widget.handleSearch);
 
 router.post('/feedback', widget.feedback)
+
 router.post('/bugReport', widget.addBugReport)
 // router.post('/login', widget.userLogin)
 // router.post('/register', widget.userRegister)
 
 module.exports = router
+

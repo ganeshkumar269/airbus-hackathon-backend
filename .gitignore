@@ -1,3 +1,6 @@
 node_modules/
 .env
 mainLog.log
+*.json
+test
+*.txt
