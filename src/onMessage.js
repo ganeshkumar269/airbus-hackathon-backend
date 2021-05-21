@@ -1,5 +1,6 @@
 const logger = require("../util/loggermodule")
 const patternMatch = require('../util/patternMatch')
+const handleChatbot = require('./handleChatbot')
 
 /*
 
@@ -10,6 +11,7 @@ const patternMatch = require('../util/patternMatch')
 
     {
         chatbot: boolean,
+        initalmessage:boolean,
         text: string
     }
 
@@ -45,8 +47,11 @@ const onMessage = async (conn,data,keywords,keywordToUrls)=>{
         logger.info(response_obj)
         conn.send(JSON.stringify(response_obj))
     }
-    if(data_json.chatbot == true)
-        handleChatbot(data_json)
+    if(data_json.chatbot == true){
+        const responseText = await handleChatbot(data_json)
+        logger.info("onMessage.js, ResponseText Receieved: ", responseText)
+        conn.send(responseText)
+    }
 }
 
 module.exports = onMessage
