@@ -165,6 +165,43 @@ const addKeywords = async function(req, res) {
 
 }
 
+const addAnnouncement = async function(req, res) {
+    const website_id = req.body.website_id;
+    const announcementData = req.body.announcement;
+    if(website_id == null || announcementData==null){
+        logger.error("website_id or announcement not present")
+        res.send(403)
+    } else {
+        try {
+            const client = await dbConn();
+            const database = client.db("ahd")
+            const collection = database.collection("announcement")
+
+            const data = await collection.findOne({website_id: website_id})
+            let announcement = {id: Date.now(), announcement: announcementData}
+            let result
+            if(data){
+                result = await collection.updateOne(
+                    {website_id: website_id}, {$push: { announcement: announcement}}
+                    )
+                
+            } else {
+                result = await collection.insertOne(
+                    {website_id:website_id, announcement:[announcement]}
+                    )
+            }
+        
+            if(result)
+                res.status(200).json({"msg" : "announcement created"})
+            else
+                res.send(404)
+        } catch(error) {
+            logger.error(error.message)
+            res.status(500).send({"msg":error.message})
+        }
+    }
+}
+
 async function checkIfUserAlreadyPresent(email) {
     const client = await dbConn();
     const database = client.db("ahd")
@@ -180,6 +217,7 @@ module.exports = {
     registerUser, 
     loginUser, 
     getKeywords,
-    addKeywords
+    addKeywords,
+    addAnnouncement
 }
 
