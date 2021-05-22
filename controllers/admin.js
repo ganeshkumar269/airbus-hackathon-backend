@@ -273,7 +273,7 @@ const usercountdetails = async (req,res)=>{
         .find({webiste_id:wi})
         .limit(1)
         .toArray()
-
+        logger.info(r)
         res.status(200).json({"msg":"Success",data:r[0].data})
     }
     catch(err){
@@ -291,6 +291,7 @@ const averagecountdetails = async (req,res)=>{
         .limit(1)
         .toArray()
 
+        logger.info(r)
         res.status(200).json({"msg":"Success",data:r[0].data})
     }
     catch(err){
@@ -308,6 +309,7 @@ const averagetimedetails = async (req,res)=>{
         .limit(1)
         .toArray()
 
+        logger.info(r)
         res.status(200).json({"msg":"Success",data:r[0].data})
     }
     catch(err){
