@@ -38,7 +38,7 @@ const addQna = async (question,answer,website_id)=>{
         "headers": {
             "accept": "*/*",
             "accept-language": "en-US,en;q=0.9,te-IN;q=0.8,te;q=0.7",
-            "authorization": "Bearer ya29.a0AfH6SMChVO_vlgbNfgBiVxc7DTKoyOrbYXbr_BhfAOhW6h01ocQKVaLyn_EFGBXW7Z9_YnVm09NaDuD4uAjkCmm5mu5e4JDoA9zd_qGRpPJTcgEW24i8ElWBez6W3V_hQyCL7IxGF0TaMUc5Ebl0tRCEHkgKlRvRfQ6fWnlFzFGGZ-wjqZlYg4us194hbNsLzsH40bvWgeb457zfvdxNv9qpmdi2kmfOoS0osVNXxQrVDwA",
+            "authorization": "Bearer ya29.a0AfH6SMBfYj6RqyDIJcGtPqEv3fl35IRTB4Gu3gRfiVJFWWgVwKFbttk6ZkjHnvWtij8qO4Y3WlYGJ-Qip9z-v2HFMIpP8C6uKnV5xifRpbbjwMt65q664XC3IoK6BO2O-jjaxbycTWTZDQMO8m6OSCm0urxMNtE8yXCElsFH7GiXpr32KjxIlehLLlxg6e_uhTnHpaagvDDBGK6NOSKl78qPJblDfdQ7tDa4llfGXmQuagQ",
             "content-type": "application/json",
             "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
             "sec-ch-ua-mobile": "?0",
