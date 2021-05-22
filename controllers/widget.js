@@ -206,11 +206,35 @@ const getAnnouncement = async function(req, res) {
     }
 }
 
+const newUserDetected = async function(req, res) {
+    const website_id = req.body.website_id;
+    if(website_id == null) {
+        logger.error("website_id is not present")
+        res.send(403)
+    }else {
+        try {
+            const client = await dbConn();
+            const database = client.db("ahd")
+            const collection = database.collection("analytics")
+            const result = await collection.updateOne(
+                {website_id:website_id},
+                {$inc : {newUserCount:1}},
+                {upsert:true}
+                )
+            res.status(200).send("OK")
+        } catch (error) {
+            logger.error(error.message)
+            res.status(500).send(error.message)
+        }
+    }
+}
+
 module.exports = {
     // handleSearch,
     feedback,
     addBugReport,
     userLogin,
-    getAnnouncement
+    getAnnouncement,
+    newUserDetected
 }
 
