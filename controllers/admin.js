@@ -121,6 +121,7 @@ const addKeywords = async function(req, res) {
             const database = client.db("ahd")
 
             const keywordCollection = database.collection("keyword_table")
+            const collection = database.collection("website_keywords")
 
             const keywordsData = await keywordCollection.findOne({website_id: websiteId})
 
@@ -138,6 +139,11 @@ const addKeywords = async function(req, res) {
                         {upsert: true}
                         )
                 })
+                collection.updateOne(
+                    {website_id:websiteId},
+                    {$addToSet: { keywords: {$each:keyword}}},
+                    {upsert:true}
+                    )
             })
 
             res.status(200).send({"msg":"keywords added"});
