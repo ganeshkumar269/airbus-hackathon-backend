@@ -47,22 +47,10 @@ const onConnection = async (ws,conn,req)=>{
         logger.info("onConnection.js data, ", data)
         keywordToUrls = data
         Object.keys(keywordToUrls).forEach(key=>{
-            logger.debug(key)
             keywords.push(key)
         })
         logger.info("onConnection.js keywords", keywords)
     })
-    // Promise.all([
-    //     getKeywords(website_id),
-    //     getKeywordUrls(website_id)
-    // ])
-    // .then((values)=>{
-    //     if(values.length == 2){
-    //         logger.info(values)
-    //         keywords = values[0].keywords
-    //         keywordToUrls = values[1]
-    //     }
-    // })
 
 }
 
