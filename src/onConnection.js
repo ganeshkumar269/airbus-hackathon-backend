@@ -46,8 +46,10 @@ const onConnection = async (ws,conn,req)=>{
     .then(data=>{
         logger.info("onConnection.js data, ", data)
         keywordToUrls = data
-        for(let key in Object.keys(keywordToUrls))
+        for(let key in Object.keys(keywordToUrls)){
+            if(key == '_id') continue
             keywords.push(key)
+        }
         logger.info("onConnection.js keywords", keywords)
     })
     // Promise.all([
