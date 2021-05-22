@@ -207,11 +207,59 @@ const getAnnouncement = async function(req, res) {
     }
 }
 
+const newuserdetected = async(req,res)=>{
+    const website_id = req.body.website_id
+    const db = await dbConn()
+    try{
+        await db.db('ahd').collection('usercount')
+        .updateOne({website_id:website_id},{$inc: {count:1}},{upsert:true})
+        res.status(200).json({"msg":"Success"})
+    }
+    catch(err){
+        logger.info(err)
+        res.status(500).json({"msg":"failed"})
+    }
+    
+}
+
+const oldusersetcount = async (req,res)=>{
+    const website_id = req.body.website_id
+    const count = req.body.count
+    const db =await dbConn()
+    try{
+        await db.db('ahd').collection('oldusersetcount')
+        .updateOne({website_id},{$set:{count:count}},{upsert:true})
+        res.status(200).json({"msg":"Success"})
+    }
+    catch(err){
+        logger.info(err)
+        res.status(500).json({"msg":"failed"})
+    }
+}
+
+const addusertime = async (req,res)=>{
+    const website_id = req.body.website_id
+    const time = req.body.time
+    const db =await dbConn()
+    try{
+        await db.db('ahd').collection('usertime')
+        .updateOne({website_id},{$inc:{time:time}},{upsert:true})
+        res.status(200).json({"msg":"Success"})
+    }
+    catch(err){
+        logger.info(err)
+        res.status(500).json({"msg":"failed"})
+    }
+}
+
 module.exports = {
     // handleSearch,
     feedback,
     addBugReport,
     userLogin,
-    getAnnouncement
+    getAnnouncement,
+    newuserdetected,
+    oldusersetcount,
+    addusertime
 }
 

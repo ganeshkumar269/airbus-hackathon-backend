@@ -95,17 +95,17 @@ const getKeywords = async function(req, res) {
     else {
         const client = await dbConn();
         const database = client.db("ahd")
-        const keywords = database.collection("website_keywords")
+        const keywords = database.collection("keyword_table")
 
         const keywordsData = await keywords.findOne({website_id: websiteId})
 
-        if(keywordsData){
-            const keyword_arr = keywordsData.keywords
-            res.status(200).send(keyword_arr)
-        } else {
-            logger.info("website id donot match")
-            res.status(404).send({"msg":"website id donot match"})
-        }
+        res.status(200).send(keywordsData)
+        // if(keywordsData){
+        //     // const keyword_arr = keywordsData.keywords
+        // } else {
+        //     logger.info("website id donot match")
+        //     res.status(404).send({"msg":"website id donot match"})
+        // }
     }
 }
 
@@ -121,24 +121,31 @@ const addKeywords = async function(req, res) {
             const database = client.db("ahd")
 
             const keywordCollection = database.collection("keyword_table")
+            // const website_keywords = database.collection("website_keywords")
 
-            const keywordsData = await keywordCollection.findOne({website_id: websiteId})
+            // const keywordsData = await keywordCollection.findOne({website_id: websiteId})
 
-            keywords.forEach((d) => {
-                // console.log(d)
-                const url = d.url
-                const keyword = d.keywords
-                keyword.forEach((k) => {
-                    // console.log(k,url)
-                    var addToSet = {};
-                    addToSet[k] = url
-                    keywordCollection.updateOne(
-                        {website_id:websiteId}, 
-                        {$addToSet : addToSet },
-                        {upsert: true}
-                        )
-                })
-            })
+            await keywordCollection
+            .updateOne({website_id:websiteId},{$set:keywords},{upsert:true})
+            // keywordsArray = []
+
+            // keywords.forEach((d) => {
+            //     // console.log(d)
+            //     const url = d.url
+            //     const keyword = d.keywords
+            //     keyword.forEach((k) => {
+            //         // console.log(k,url)
+            //         keywordsArray.push(k)
+
+            //         var addToSet = {};
+            //         addToSet[k] = url
+            //         keywordCollection.updateOne(
+            //             {website_id:websiteId}, 
+            //             {$addToSet : addToSet },
+            //             {upsert: true}
+            //             )
+            //     })
+            // })
 
             res.status(200).send({"msg":"keywords added"});
 
@@ -237,6 +244,57 @@ const handleAddQna = async (req,res)=>{
 }
 
 
+const usercountdetails = async (req,res)=>{
+    const wi = req.query.website_id
+    try{
+        const db = await dbConn()
+        
+        const r = await db.db('ahd').collection('usercount')
+        .find({webiste_id:wi})
+        .limit(1)
+        .toArray()
+
+        res.status(200).json({"msg":"Success",data:r[0].data})
+    }
+    catch(err){
+        logger.info(err)
+        res.status(500).json({"msg":"failed"})
+    }
+}
+const averagecountdetails = async (req,res)=>{
+    const wi = req.query.website_id
+    try{
+        const db = await dbConn()
+        
+        const r = await db.db('ahd').collection('oldusersetcount')
+        .find({webiste_id:wi})
+        .limit(1)
+        .toArray()
+
+        res.status(200).json({"msg":"Success",data:r[0].data})
+    }
+    catch(err){
+        logger.info(err)
+        res.status(500).json({"msg":"failed"})
+    }
+}
+const averagetimedetails = async (req,res)=>{
+    const wi = req.query.website_id
+    try{
+        const db = await dbConn()
+        
+        const r = await db.db('ahd').collection('usertime')
+        .find({webiste_id:wi})
+        .limit(1)
+        .toArray()
+
+        res.status(200).json({"msg":"Success",data:r[0].data})
+    }
+    catch(err){
+        logger.info(err)
+        res.status(500).json({"msg":"failed"})
+    }
+}
 
 module.exports = {
     registerUser, 
@@ -244,6 +302,9 @@ module.exports = {
     getKeywords,
     addKeywords,
     addAnnouncement,
-    handleAddQna
+    handleAddQna,
+    usercountdetails,
+    averagecountdetails,
+    averagetimedetails
 }
 

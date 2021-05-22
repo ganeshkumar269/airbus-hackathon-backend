@@ -4,7 +4,7 @@ const {getDbConn} = require('./getDbConn')
 const getKeywords = async (website_id)=>{
     try{
         const db = await getDbConn()
-        return db.db('ahd').collection('website_keywords')
+        return db.db('ahd').collection("keyword_table")
         .find({"website_id":website_id})
         .limit(1)
         .toArray()

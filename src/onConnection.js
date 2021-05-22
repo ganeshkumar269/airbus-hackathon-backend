@@ -42,17 +42,25 @@ const onConnection = async (ws,conn,req)=>{
     conn.on('close',()=>logger.info("Ws Conn closed"))
     conn.on('error',(err)=>logger.info("Ws Conn error",err))
 
-    Promise.all([
-        getKeywords(website_id),
-        getKeywordUrls(website_id)
-    ])
-    .then((values)=>{
-        if(values.length == 2){
-            logger.info(values)
-            keywords = values[0].keywords
-            keywordToUrls = values[1]
-        }
+    getKeywordUrls(website_id)
+    .then(data=>{
+        logger.info("onConnection.js data, ", data)
+        keywordToUrls = data
+        for(let key in Object.keys(keywordToUrls))
+            keywords.push(key)
+        logger.info("onConnection.js keywords", keywords)
     })
+    // Promise.all([
+    //     getKeywords(website_id),
+    //     getKeywordUrls(website_id)
+    // ])
+    // .then((values)=>{
+    //     if(values.length == 2){
+    //         logger.info(values)
+    //         keywords = values[0].keywords
+    //         keywordToUrls = values[1]
+    //     }
+    // })
 
 }
 

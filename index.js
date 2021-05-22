@@ -28,6 +28,6 @@ app.use('/api/v1/',widgetRouter)
 const httpserver = http.createServer({},app)
 const wsserver = new ws.Server({ server:httpserver });
 
-httpserver.listen(process.env.PORT || 3000,() => console.log("Server at 3000"))
+httpserver.listen(process.env.PORT || 4000,() => console.log("Server at 4000"))
 
 wsserver.on('connection',(conn,req)=>onConnection(wsserver,conn,req))
